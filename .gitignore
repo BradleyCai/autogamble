@@ -1,0 +1,4 @@
+# Ignore all generated pictures
+img/checks/*
+img/test-output/*
+
