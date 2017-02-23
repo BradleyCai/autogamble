@@ -2,3 +2,5 @@
 img/checks/*
 img/test-output/*
 
+# Ignore all test things
+test/*
