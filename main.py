@@ -1,8 +1,9 @@
+import os, sys, getopt
+from tempfile import TemporaryFile
+
 from pytesseract import image_to_string
 from PIL import Image, ImageEnhance, ImageFilter, ImageGrab
-from tempfile import TemporaryFile
 import re, numpy, time
-import os, sys
 
 # Returns a cropped and binarized image
 def enhance(img, name = ""):
@@ -12,9 +13,9 @@ def enhance(img, name = ""):
     with TemporaryFile() as jpgimg:
         img.save(jpgimg, "JPEG")
         img = Image.open(jpgimg)
-        img = binarize_image(jpgimg) # Binarize image
+        img = binarize_image(jpgimg) # Binarize image. Changes to a PIL.Image object
 
-    # Converts back to a jpg image object. Saves to a file if in TESTING mode
+    # Converts img back to a jpg image object. Saves to a file if in TESTING mode
     if (TESTING):
         jpgimg = open("img/test-output/%s.jpg" % (name), "w+b")
     else:
@@ -117,20 +118,40 @@ def main():
     TESTING = False
     DEBUG = False
     in_afk = False # Flag if still in afk check
-    img_i = 0
+    img_i = 0 # afk check solve number
+    delay = 0
     checkdir = "img/checks/" + time.strftime("%d%m%Y-%H%M%S")
 
     os.mkdir(checkdir)
 
-    if ('-t' in sys.argv):
-        TESTING = True
-    if ('-d' in sys.argv):
-        DEBUG = True
+    try:
+        opts = getopt.getopt(sys.argv[1:], 'htda:')[0]
+    except getopt.GetoptError:
+        print("Usage: ")
+        sys.exit(2)
+    for opt, arg in opts:
+        if (opt == "-h"):
+            print("Usage: main.py [-h] [-t] [-d] [-a <seconds>]")
+            print("\n-h\tprints help and exits")
+            print("\n-t\truns tests")
+            print("\n-d\tsets debug mode that prints extra output")
+            print("\n-a\tadds delay (in seconds) before main part of program")
+            sys.exit()
+        elif (opt == "-t"):
+            TESTING = True
+        elif (opt == "-d"):
+            DEBUG = True
+        elif (opt == "-a"):
+            delay = int(arg)
 
     if (TESTING):
         run_tests()
 
     input("Press enter to start\n")
+    if (delay > 0):
+        print("Starting in {} seconds".format(delay))
+        time.sleep(delay)
+        print("Starting\n")
 
     while(True):
         img = ImageGrab.grab()
