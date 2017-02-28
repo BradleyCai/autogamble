@@ -4,3 +4,6 @@ img/test-output/*
 
 # Ignore 'ignore' files
 ignore/*
+
+# Ignore compiled python files
+*.pyc

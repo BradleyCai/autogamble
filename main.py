@@ -122,7 +122,7 @@ def main():
     delay = 0
     checkdir = "img/checks/" + time.strftime("%d%m%Y-%H%M%S")
 
-    os.mkdir(checkdir)
+    os.mkdir(checkdir) # Creates a unique folder for output to sit in
 
     try:
         opts = getopt.getopt(sys.argv[1:], 'htda:')[0]
