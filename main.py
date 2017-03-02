@@ -1,7 +1,7 @@
 import os, sys, getopt
 from tempfile import TemporaryFile
 
-from pytesseract import image_to_string
+from pytesseract.pytesseract import image_to_string
 from PIL import Image, ImageEnhance, ImageFilter, ImageGrab
 import re, numpy, time
 
@@ -67,7 +67,7 @@ def find_afk_check(text):
     match = re.search(r'Press[ \t]+(\w)[ \t]+to[ \t]+continue[ \t]+playing.?', text, re.I)
 
     if match:
-        dprint("{} with char '{}'".format(match.group(0), match.group(1)))
+        dprint("In \"{}\" got char '{}'".format(match.group(0), match.group(1)))
         return match.group(1)
     else:
         # If it fails the first time try again with a more lenient regex
