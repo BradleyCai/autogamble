@@ -191,14 +191,20 @@ def main():
             else:
                 dprint("[Testing] Fresh test on '%d'", img_i)
                 dprint("Got %s", c)
+                if ord(c) < ord('a') or ord(c) > ord('z')
+                    dprint("The solution isn't a letter in the alphabet. Immediately moving on to guesses.")
+                    c = guess_check(c, guessed)
+                    dprint("[Testing] Trying %s", c)
+                in_afk = True
 
             img = img.save("{}/{}.jpg".format(checkdir, img_i))
-            in_afk = True
             img_i += 1
             keyboard.press_and_release(c)
+            time.sleep(0.5)
         else:
             keyboard.press_and_release("space")
             if in_afk:
+                dprint("Solution for '%d' succeeded!", img_i - 1)
                 # clear afk try history
                 in_afk = False
                 guessed = 0
