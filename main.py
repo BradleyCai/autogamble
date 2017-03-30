@@ -3,7 +3,7 @@ from tempfile import TemporaryFile
 
 from pytesseract.pytesseract import image_to_string
 from PIL import Image, ImageEnhance, ImageFilter, ImageGrab
-import re, numpy, time, keyboard
+import re, numpy, time, keyboard, json
 
 # Returns a cropped and binarized image
 def enhance(img, name = ""):
@@ -85,16 +85,19 @@ def solve_check(text):
     return None
 
 # Returns a character guess for afk check
-# Has a json of guesses and alternatives for each character in the alphabet
 #
+# Takes a json of guesses and alternatives for each character in the alphabet
 # Takes the resulting character from solve_check() and guesses close
 # alternatives
 # Takes a guessed index of the current guess the script is on
-def guess_check(c, guessed):
-    if guessed < 26:
-        return chr(ord('a') + guessed)
+def guess_check(c, guesses, guessed):
+    if c not in guesses:
+        dprint("Character '%s' not found in guesses", c)
+        return chr(ord('e'))
+    if guessed < len(guesses[c]):
+        return guesses[c][guessed]
     else:
-        return chr(ord('0'))
+        return chr(ord('e'))
 
 def run_tests():
     imgs = []
@@ -138,8 +141,11 @@ def main():
     img_i = 0 # afk check solve number
     delay = 0
     checkdir = "img/checks/" + time.strftime("%d%m%Y-%H%M%S")
+    guesses = 0
     guessed = 0 # Index for current guess try
-
+    start_time = time.time()
+    with open('guesses.json') as guesses_file:
+            guesses = json.load(guesses_file)
     os.mkdir(checkdir) # Creates a unique folder for output to sit in
 
     try:
@@ -180,20 +186,23 @@ def main():
         c = solve_check(text)
 
         if c:
+            curr_time = time.time() - start_time
+            dprint("Afk check at %d minutes and %d seconds", curr_time//60, curr_time%60 )
             if in_afk:
-                dprint("[FAILED] Failed on %d", img_i)
-
-                c = guess_check(c, guessed)
-                dprint("[Testing] Trying %s", c)
-
+                c = guess_check(c, guesses, guessed)
                 guessed += 1
+
+                dprint("[FAILED] Failed on %d", img_i)
+                dprint("[Testing] Trying %s", c)
 
             else:
                 dprint("[Testing] Fresh test on '%d'", img_i)
                 dprint("Got %s", c)
-                if ord(c) < ord('a') or ord(c) > ord('z')
+                if ord(c) < ord('a') or ord(c) > ord('z'):
                     dprint("The solution isn't a letter in the alphabet. Immediately moving on to guesses.")
-                    c = guess_check(c, guessed)
+                    c = guess_check(c, guesses, guessed)
+                    guessed += 1
+
                     dprint("[Testing] Trying %s", c)
                 in_afk = True
 
