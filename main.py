@@ -16,7 +16,7 @@ def enhance(img, name = ""):
         img = binarize_image(jpgimg) # Binarize image. Changes to a PIL.Image object
 
     # Converts img back to a jpg image object. Saves to a file if in TESTING mode
-    if (TESTING):
+    if TESTING:
         jpgimg = open("img/test-output/%s.jpg" % (name), "w+b")
     else:
         jpgimg = TemporaryFile()
@@ -56,8 +56,8 @@ def crop(img):
 
 # Prints in an printf style. Only prints if in DEBUG mode
 def dprint(s = "", *args):
-    if (DEBUG):
-        if (len(args) > 0):
+    if DEBUG:
+        if len(args) > 0:
             print(s % args)
         else:
             print(s)
@@ -91,9 +91,9 @@ def solve_check(text):
 # alternatives
 # Takes a guessed index of the current guess the script is on
 def guess_check(c, guessed):
-    if (guessed <= 26)
+    if guessed < 26:
         return chr(ord('a') + guessed)
-    else
+    else:
         return chr(ord('0'))
 
 def run_tests():
@@ -118,10 +118,10 @@ def run_tests():
         c = solve_check(text) # Gets character for afk check
 
         ans = ele[1][0] # Answer is in the file name
-        if (c == ans):
+        if c == ans:
             print("Test passed")
         else:
-            if (c):
+            if c:
                 print("[FAILED] Test failed. Got '%s' instead of '%s'." % (c, ans))
             else:
                 print("[FAILED] Test failed. Regex did not return any result.")
@@ -148,39 +148,39 @@ def main():
         print("Usage: ")
         sys.exit(2)
     for opt, arg in opts:
-        if (opt == "-h"):
+        if opt == "-h":
             print("Usage: main.py [-h] [-t] [-d] [-a <seconds>]")
             print("\n-h\tprints help and exits")
             print("\n-t\truns tests")
             print("\n-d\tsets debug mode that prints extra output")
             print("\n-a\tadds delay (in seconds) before main part of program")
             sys.exit()
-        elif (opt == "-t"):
+        elif opt == "-t":
             TESTING = True
-        elif (opt == "-d"):
+        elif opt == "-d":
             DEBUG = True
-        elif (opt == "-a"):
+        elif opt == "-a":
             delay = int(arg)
 
-    if (TESTING):
+    if TESTING:
         run_tests()
         sys.exit();
 
     input("Press enter to start\n")
-    if (delay > 0):
+    if delay > 0:
         print("Starting in {} seconds".format(delay))
         time.sleep(delay)
         print("Starting\n")
 
-    while(True):
+    while True:
         img = ImageGrab.grab()
 
         img = enhance(img)
         text = image_to_string(img, lang='eng')
         c = solve_check(text)
 
-        if (c):
-            if (in_afk):
+        if c:
+            if in_afk:
                 dprint("[FAILED] Failed on %d", img_i)
 
                 c = guess_check(c, guessed)
@@ -197,7 +197,8 @@ def main():
             img_i += 1
             keyboard.press_and_release(c)
         else:
-            if (in_afk):
+            keyboard.press_and_release("space")
+            if in_afk:
                 # clear afk try history
                 in_afk = False
                 guessed = 0
