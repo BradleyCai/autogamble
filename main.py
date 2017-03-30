@@ -3,7 +3,7 @@ from tempfile import TemporaryFile
 
 from pytesseract.pytesseract import image_to_string
 from PIL import Image, ImageEnhance, ImageFilter, ImageGrab
-import re, numpy, time
+import re, numpy, time, keyboard
 
 # Returns a cropped and binarized image
 def enhance(img, name = ""):
@@ -91,7 +91,10 @@ def solve_check(text):
 # alternatives
 # Takes a guessed index of the current guess the script is on
 def guess_check(c, guessed):
-    return chr(ord('a') + guessed)
+    if (guessed <= 26)
+        return chr(ord('a') + guessed)
+    else
+        return chr(ord('0'))
 
 def run_tests():
     imgs = []
@@ -192,6 +195,7 @@ def main():
             img = img.save("{}/{}.jpg".format(checkdir, img_i))
             in_afk = True
             img_i += 1
+            keyboard.press_and_release(c)
         else:
             if (in_afk):
                 # clear afk try history
