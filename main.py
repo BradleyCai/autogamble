@@ -201,12 +201,13 @@ def main():
                 dprint("[Testing] Fresh test on '%d'", img_i)
                 dprint("Got %s", c)
                 if ord(c) < ord('a') or ord(c) > ord('z'):
-                    dprint("The solution isn't a letter in the alphabet. Immediately moving on to guesses.")
+                    dprint("The solution isn't a lower case letter in the alphabet. Immediately moving on to guesses.")
                     c = guess_check(c, guesses, guessed)
                     guessed += 1
 
                     dprint("[Testing] Trying %s", c)
-                in_afk = True
+
+            in_afk = True
 
             img = img.save("{}/{}.jpg".format(checkdir, img_i))
             img_i += 1
