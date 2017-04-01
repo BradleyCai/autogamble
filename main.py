@@ -99,7 +99,7 @@ def guess_check(c, guesses, guessed):
     if guessed < len(guesses[c]):
         return guesses[c][guessed]
     else:
-        return chr(ord('e'))
+        return chr(ord('0'))
 
 def run_tests():
     imgs = []
