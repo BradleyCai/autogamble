@@ -69,17 +69,19 @@ def dprint(s = "", *args):
 # If the string does not fit the strict format, a less strict fallback solver
 # is used.
 def solve_check(text):
-    match = re.search(r'Press[ \t]+(\w)[ \t]+to[ \t]+continue[ \t]+playing.?', text, re.I)
+    match = re.search(r'Press[ \t]*(\w)[ \t]*to[ \t]*continue[ \t]*playing.?', text, re.I)
 
     if match:
+        dprint("=================================================")
         dprint("In \"{}\" got char '{}'".format(match.group(0), match.group(1)))
         return match.group(1)
     else:
         # If it fails the first time try again with a more lenient regex
         match = re.search(r'[^ \t\n]+[ \t]+([^ \t\n])[ \t]+[^ \t\n]+[ \t]+[^ \t\n]+[ \t]+[^ \t\n]+[^ \t\n]?', text, re.I)
         if match:
+            dprint("=================================================")
             dprint("[Warning] First regex failed. Trying:")
-            dprint("{} with char '{}'".format(match.group(0), match.group(1)))
+            dprint("In \"{}\" got char '{}'".format(match.group(0), match.group(1)))
             return match.group(1)
 
     return None
