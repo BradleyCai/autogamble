@@ -181,6 +181,11 @@ def main():
         print("Starting\n")
 
     while True:
+        if keyboard.is_pressed("ctrl+shift+z"):
+            print("Paused")
+            keyboard.wait("ctrl+shift+x")
+            print("Resumed")
+
         img = ImageGrab.grab()
 
         img = enhance(img)
